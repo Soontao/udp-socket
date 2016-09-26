@@ -1,0 +1,15 @@
+{
+  "name": "ws-udp",
+  "version": "0.0.1",
+  "description": "informal websocket liked socket.io with udp protocol ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "udp",
+    "websocket"
+  ],
+  "author": "suntao <mrls@live.cn>",
+  "license": "MIT"
+}

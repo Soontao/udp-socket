@@ -10,7 +10,7 @@ server
 
 ```js
 'use strict'
-const UdpSocket = require('./index').Server
+const UdpSocket = require('ndpsocket').Server
 const server = new UdpSocket();
 
 const readline = require('readline');
@@ -42,7 +42,7 @@ client
 ```js
 'use strict'
 
-const ClientSocket = require('./index').Client
+const ClientSocket = require('ndpsocket').Client
 const client = new ClientSocket({ address: 'localhost', port: 43214 })
 const readline = require('readline');
 const rl = readline.createInterface(process.stdin, process.stdout);

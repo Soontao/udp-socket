@@ -1,5 +1,5 @@
 {
-  "name": "udp socket",
+  "name": "udpsocket",
   "version": "0.0.1",
   "description": "informal udp module liked socket.io ",
   "main": "index.js",
@@ -13,6 +13,7 @@
   "author": "suntao <mrls@live.cn>",
   "license": "MIT",
   "repository": {
+    "type": "git",
     "url": "https://github.com/Soontao/udp-socket.git"
   }
 }

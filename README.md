@@ -1,10 +1,10 @@
 # udp socket
 
-A library like socket.io but implement with udp protocol
+A module like socket.io but implement with udp protocol
 
-In Statard,websocket shoule be implement with tcp/http,this module just a exercise
+In statard,websocket shoule be implement with tcp/http,this module just a exercise,so please not use it in production environment
 
-## usage
+## usage - a simple chat server
 
 server
 
@@ -59,3 +59,11 @@ rl.on('line', (line) => {
   client.emit('message', line.trim());
 })
 ```
+
+## TO DO
+
+ack
+
+check server is alive
+
+faster serialize

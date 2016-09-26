@@ -1,1 +1,4 @@
-module.exports = require('./lib/udpsocket');
+module.exports = {
+  Server: require('./lib/udpsocket'),
+  Client: require('./lib/udpclient').SocketClient
+}

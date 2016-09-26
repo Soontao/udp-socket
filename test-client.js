@@ -1,11 +1,18 @@
 'use strict'
 
-const dgram = require('dgram');
+const ClientSocket = require('./index').Client
+const client = new ClientSocket({ address: 'localhost', port: 43214 })
+const readline = require('readline');
+const rl = readline.createInterface(process.stdin, process.stdout);
 
-const client = dgram.createSocket('udp4');
+client.on('message', (m) => {
+  console.log(m)
+})
 
-const payload = new Buffer(JSON.stringify({ event: "hello", message: "world" }))
+client.socket.on('listening', () => {
+  console.log(client.socket.address().port)
+})
 
-client.send(payload, 0, payload.length, 43214, 'localhost')
-
-client.send(payload, 0, payload.length, 43214, 'localhost')
+rl.on('line', (line) => {
+  client.emit('message', line.trim());
+})

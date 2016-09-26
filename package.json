@@ -1,7 +1,7 @@
 {
-  "name": "ws-udp",
+  "name": "udp socket",
   "version": "0.0.1",
-  "description": "informal websocket liked socket.io with udp protocol ",
+  "description": "informal udp module liked socket.io ",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +11,8 @@
     "websocket"
   ],
   "author": "suntao <mrls@live.cn>",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "url": ""
+  }
 }

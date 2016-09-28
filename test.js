@@ -1,26 +1,68 @@
 'use strict'
-const UdpSocket = require('./index').Server
-const server = new UdpSocket();
 
-const readline = require('readline');
-const rl = readline.createInterface(process.stdin, process.stdout);
+const dgram = require('dgram');
+const ClientBase = require('./udpclient').SocketBase;
+const SocketEmitter = require('./udpclient').SocketEmitter;
 
-let cclient = null;
-server.on('connecting', client => {
-  cclient = client;
-  console.log(`connect from ${client.rinfo.address}:${client.rinfo.port}`)
-  client.on('message', msg => {
-    console.log(msg)
-  })
-})
+class ServerSocket extends ClientBase {
+
+  constructor(server, rinfo) {
+    super();
+    this.server = server;
+    this.key = `${rinfo.address}-${rinfo.port}`
+    this.rinfo = rinfo;
+    this.socket = this.server.socket;
+    this.isalive = true;
+    this.emitter.on('server-message', (buf, rinfo) => {
+      const payload = JSON.parse(buf.toString())
+      const event = payload.event;
+      const msg = payload.message;
+      this.emitter.emit(event, msg, rinfo);
+    });
+    this.emitter.on('close', (buf, rinfo) => {
+      clearInterval(this.heartcheck);
+      delete this.server.clients[this.key]
+    });
+    this.emitter.on('heartbreak', () => {
+      this.isalive = true
+    });
+    this.heartcheck = setInterval(() => {
+      if (!this.isalive) this.emitter.emit('close', null, this.rinfo);
+      else this.isalive = false;
+    }, 15 * 1000);
+  }
+}
 
 
-server.onListening(() => {
-  console.log(`listen on ${JSON.stringify(server.socket.address())}`)
-})
 
-rl.on('line', (line) => {
-  cclient.emit('message', line.trim());
-})
 
-server.socket.bind(43214);
+/**
+ * 基于udp socket的封装
+ */
+class UdpServer extends SocketEmitter {
+
+  constructor() {
+    super();
+    this.socket = dgram.createSocket('udp4');
+    this.clients = {};
+    this.socket.on('message', (buf, rinfo) => {
+      const key = `${rinfo.address}-${rinfo.port}`
+      let client = this.clients[key];
+      if (!client) {
+        client = (this.clients[key] = new ServerSocket(this, rinfo));
+        this.emit('connecting', client, rinfo)
+      }
+      client.emitter.emit('server-message', buf, rinfo)
+    });
+
+    this.socket.on('listening', () => this.emit('listening', this.socket))
+  }
+
+  listen(port) {
+    this.socket.bind(port);
+  }
+
+}
+
+
+module.exports = UdpServer;

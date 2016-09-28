@@ -10,11 +10,10 @@ server
 
 ```js
 'use strict'
-const UdpSocket = require('ndpsocket').Server
-const server = new UdpSocket();
 
-const readline = require('readline');
-const rl = readline.createInterface(process.stdin, process.stdout);
+const UdpSocket = require('udpsocket').Server
+const server = new UdpSocket();
+const rl =  require('readline').readline.createInterface(process.stdin, process.stdout);
 
 let cclient = null;
 server.on('connecting', client => {
@@ -23,11 +22,6 @@ server.on('connecting', client => {
   client.on('message', msg => {
     console.log(msg)
   })
-})
-
-
-server.onListening(() => {
-  console.log(`listen on ${JSON.stringify(server.socket.address())}`)
 })
 
 rl.on('line', (line) => {
@@ -42,17 +36,12 @@ client
 ```js
 'use strict'
 
-const ClientSocket = require('ndpsocket').Client
+const ClientSocket = require('udpsocket').Client
 const client = new ClientSocket({ address: 'localhost', port: 43214 })
-const readline = require('readline');
-const rl = readline.createInterface(process.stdin, process.stdout);
+const rl = require('readline').createInterface(process.stdin, process.stdout);
 
 client.on('message', (m) => {
   console.log(m)
-})
-
-client.socket.on('listening', () => {
-  console.log(client.socket.address().port)
 })
 
 rl.on('line', (line) => {
